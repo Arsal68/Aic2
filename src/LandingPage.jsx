@@ -4,17 +4,20 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useNavigate } from "react-router-dom";
 
+// --- 1. IMPORT IMAGES HERE ---
+import lps from "./assets/lps.png";
+import sen from "./assets/sen.png";
+import nsa from "./assets/nsa.png";
+import nas from "./assets/nas.png";
+import mosaic from "./assets/mosaic.png";
+import nds from "./assets/nds.png";
+import gsc from "./assets/gsc.png";
+import logo from "./assets/logo.png"; // Import logo too
+
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const IMAGES = [
-  "../src/assets/lps.png",
-  "../src/assets/sen.png",
-  "../src/assets/nsa.png",
-  "../src/assets/nas.png",
-  "../src/assets/mosaic.png",
-  "../src/assets/nds.png",
-  "../src/assets/gsc.png",
-];
+// --- 2. USE VARIABLES IN ARRAY ---
+const IMAGES = [lps, sen, nsa, nas, mosaic, nds, gsc];
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -22,8 +25,9 @@ function LandingPage() {
   const [isVisible, setIsVisible] = useState(true);
 
   useGSAP(() => {
-    // Scroll animation for the horizontal moving text
-    gsap.to("#moving-text", {
+    const tl = gsap.timeline();
+
+    tl.to("#page2 p", {
       xPercent: 120,
       ease: "none",
       scrollTrigger: {
@@ -58,17 +62,26 @@ function LandingPage() {
       tl.fromTo(
         "#heroSec",
         { y: "100%" },
-        { y: "0%", duration: 1.2, ease: "power4.out" }
+        { y: "0%", duration: 1.2, ease: "power4.out" },
       );
 
       tl.to("#page", { opacity: 0, duration: 0.5 }, "-=0.5");
+
       tl.from("#head", { y: -20, opacity: 0, duration: 0.5 });
-      tl.from("#links", { y: -20, opacity: 0, duration: 0.4 }, "-=0.3");
+      tl.from(
+        "#links button", // target button specifically
+        {
+          y: -20,
+          opacity: 0,
+          stagger: 0.1,
+          duration: 0.4,
+        },
+        "-=0.3",
+      );
     }
   }, [index, isVisible]);
 
   return (
-    // Wrap everything in an overflow-hidden container to kill the scrollbar
     <div className="w-full overflow-x-hidden">
       {isVisible && (
         <div
@@ -84,15 +97,20 @@ function LandingPage() {
       )}
 
       <div className="min-h-screen bg-[#F9FAFB]">
-        <div id="heroSec" className="relative z-10 bg-[#F9FAFB]">
+        <div
+          id="heroSec"
+          className="relative z-10 bg-[#F9FAFB]"
+        >
+
           <nav className="bg-[#FFFFFF] text-[#101828] flex justify-between items-center px-10 py-3 h-18">
             <div id="head" className="w-48">
-               <img src="../src/assets/logo.png" alt="Logo" className="w-full h-full object-contain" />
+               {/* 3. USE IMPORTED LOGO VARIABLE HERE */}
+               <img src={logo} alt="NEDConnect Logo" className="w-full h-full object-contain" />
             </div>
-            <div id="links" className="flex gap-8 cursor-pointer">
-              <button
-                onClick={() => navigate("/login")}
-                className="hover:bg-blue-500 hover:text-white text-[#101828] px-4 py-2 rounded-2xl bg-transparent border-2 border-blue-500 transition-colors font-bold"
+            <div id="links" className="flex gap-8 text cursor-pointer">
+              <button 
+                onClick={() => navigate("/login")} 
+                className="hover:bg-blue-500 hover:text-white text-[#101828] p-2 rounded-2xl bg-transparent border-2 border-blue-500 font-bold transition-colors"
               >
                 SignIn/SignUp
               </button>
@@ -100,8 +118,8 @@ function LandingPage() {
           </nav>
 
           <div className="text-[3vw] font-mclaren text-[#101828] h-[calc(100vh-72px)] flex flex-col font-extrabold justify-center items-center">
-            <p>Connect. Create.</p>
-            <p>Celebrate.</p>
+            <p className="">Connect. Create.</p>
+            <p className="">Celebrate.</p>
           </div>
         </div>
 
@@ -109,12 +127,11 @@ function LandingPage() {
           id="page2"
           className="bg-[#111F35] h-screen flex justify-center items-center overflow-hidden"
         >
-          {/* Added id="moving-text" to specifically target this for GSAP */}
-          <p id="moving-text" className="font-asset text-[35vw] text-[#fff] whitespace-nowrap mr-550">
+          <p className="font-asset text-[35vw] text-[#fff] whitespace-nowrap mr-0 leading-none">
             جڑوگے تو جانو گے
           </p>
-        </div>
-      </div>
+        </div>        
+      </div>        
     </div>
   );
 }
