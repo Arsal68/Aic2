@@ -1,7 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom"; // ← CHANGE HERE
 
-import LandingPage from "./LandingPage"; // Import your new Landing Page
+import LandingPage from "./LandingPage";
 import AuthForm from "./AuthForm";
 import CreateEvent from "./CreateEvents";
 import StudentDashboard from "./StudentDashboard"; 
@@ -13,12 +13,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* 1. Root is now the Landing Page */}
         <Route path="/" element={<LandingPage />} />
-
-        {/* 2. Login is its own explicit route */}
         <Route path="/login" element={<AuthForm />} />
-
+        
         {/* Protected Society Routes */}
         <Route element={<ProtectedRoute allowedRole="society" />}>
           <Route path="/society-dashboard" element={<SocietyDashboard />} />
@@ -34,6 +31,8 @@ function App() {
         <Route element={<ProtectedRoute allowedRole="admin" />}>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Route>
+        
+       
       </Routes>
     </Router>
   );
